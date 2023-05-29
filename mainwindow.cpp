@@ -336,7 +336,9 @@ void MainWindow::showPath()
     if (currentIndex < Move_Pass_ArraySize-1) {
         int x = Move_Pass_Array[currentIndex].x;
         int y = Move_Pass_Array[currentIndex].y;
+
         if(Move_Pass_Array[currentIndex].sum==1){
+
             cells[x][y]->setStyleSheet("QLabel { background-color: rgb(60, 179, 113) }");
         }
         else if (Move_Pass_Array[currentIndex].sum>1){
@@ -372,7 +374,7 @@ void MainWindow::startPathAnimation()
     // 500ms마다 showPath() 메서드를 호출하는 타이머 생성 및 시작
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::showPath);
-    timer->start(5);
+    timer->start(20);
 
 
 
