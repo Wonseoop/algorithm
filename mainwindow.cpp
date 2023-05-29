@@ -34,6 +34,7 @@ int break_wall = 1;                     //벽 부수기 횟수
 struct Point {
     int x;
     int y;
+    int sum;
 };
 
 Point* Move_Pass_Array = nullptr;
@@ -249,7 +250,9 @@ void MainWindow::View_Path2(int startX, int startY){
             //cout << x << "," << y << endl;
             visited[x][y] +=1;//방문기록
             //maze[x][y] = VISIT;
-            append_Point(x,y);
+            append_Point(x,y, visited[x][y]);
+
+
         }
         else {//왼쪽이 벽이라면
             dir = (dir + 3) % 4;//원래 방향으로(오른쪽으로 회전)
@@ -260,7 +263,7 @@ void MainWindow::View_Path2(int startX, int startY){
                 y = ny;//직진
 
                 visited[x][y]  +=1;//방문기록
-                append_Point(x,y);
+                append_Point(x,y, visited[x][y]);
                 //maze[x][y] = VISIT;
                 //cout << x << "," << y << endl;
             }
@@ -273,7 +276,7 @@ void MainWindow::View_Path2(int startX, int startY){
                     y = ny;//오른쪽으로 이동
 
                     visited[x][y] +=1;//방문기록
-                    append_Point(x,y);
+                    append_Point(x,y, visited[x][y]);
                     //maze[x][y] = VISIT;
                     //cout << x << "," << y << endl;
                 }
@@ -281,7 +284,7 @@ void MainWindow::View_Path2(int startX, int startY){
                     dir = (dir + 3) % 4;//오른쪽으로 회전(유턴)
                     x = x + dx[dir];
                     y = y + dy[dir];//왔던길 다시 가기.
-                    append_Point(x,y);
+                    append_Point(x,y, visited[x][y]);
 
                     //cout << x << "," << y << endl;
                     if (maze[nx][ny] != WALL) {
@@ -301,8 +304,10 @@ void MainWindow::View_Path2(int startX, int startY){
 
 }
 
+
+
 //포인트 추가 메서드
-void MainWindow::append_Point(int x, int y){
+void MainWindow::append_Point(int x, int y, int sum){
     Point* newMovePassArray = new Point[Move_Pass_ArraySize + 1];
 
     // 기존 배열의 원소를 새로운 배열로 복사
@@ -313,6 +318,7 @@ void MainWindow::append_Point(int x, int y){
     // 새로운 원소 추가
     newMovePassArray[Move_Pass_ArraySize].x = x;
     newMovePassArray[Move_Pass_ArraySize].y = y;
+    newMovePassArray[Move_Pass_ArraySize].sum = sum;
 
     // 이전 배열 메모리 해제
     delete[] Move_Pass_Array;
@@ -330,7 +336,12 @@ void MainWindow::showPath()
     if (currentIndex < Move_Pass_ArraySize-1) {
         int x = Move_Pass_Array[currentIndex].x;
         int y = Move_Pass_Array[currentIndex].y;
-        cells[x][y]->setStyleSheet("QLabel { background-color: green }");
+        if(Move_Pass_Array[currentIndex].sum==1){
+            cells[x][y]->setStyleSheet("QLabel { background-color: rgb(60, 179, 113) }");
+        }
+        else if (Move_Pass_Array[currentIndex].sum>1){
+            cells[x][y]->setStyleSheet("QLabel { background-color: green }");
+        }
         currentIndex++;
     } else {
         // 배열 모든 원소를 보여준 후에는 타이머를 멈추고 초기화

@@ -39,7 +39,7 @@ public:
     void allocateCells();                       //동적할당
     void resetMaze();                           //초기화
     void isBlocked(int x, int y);               //스캔했을 때 막힌 길 탐색 함수
-    void append_Point(int x, int y);            //Point 추가
+    void append_Point(int x, int y, int sum);            //Point 추가
     void showPath();
     void startPathAnimation();
 
